@@ -13,7 +13,7 @@ import java.util.Random;
 import static java.lang.System.out;
 
 /**
- *
+ * @version 1.2
  * @author blackzafiro
  */
 public class Termitas extends PApplet {
