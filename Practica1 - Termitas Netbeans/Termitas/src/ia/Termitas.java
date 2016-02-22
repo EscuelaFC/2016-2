@@ -13,7 +13,7 @@ import java.util.Random;
 import static java.lang.System.out;
 
 /**
- * @version 1.2
+ * 
  * @author blackzafiro
  */
 public class Termitas extends PApplet {
@@ -325,35 +325,35 @@ public class Termitas extends PApplet {
          */
         boolean hayAstilla(Termita t, int dir) {
             // ##### IMPLEMENTACION #####
-            int x;
+            int x; 
             int y;
             switch (dir) {
-                case 0:
-                    y = (t.posY - 1) % alto;
+                case 0: //verificamos si hay astilla en la posicion 0
+                    y = (t.posY - 1) % alto; 
                     x = (t.posX - 1) % ancho;
                     return mundo[validaY(y)][validaX(x)].estado;
-                case 1:
+                case 1://verificamos si hay astilla en la posicion 1
                     y = (t.posY - 1) % alto;
                     return mundo[validaY(y)][t.posX].estado;
-                case 2:
+                case 2://verificamos si hay astilla en la posicion 2
                     y = (t.posY - 1) % alto;
                     x = (t.posX + 1) % ancho;
                     return mundo[validaY(y)][validaX(x)].estado;
-                case 3:
+                case 3://verificamos si hay astilla en la posicion 3
                     x = (t.posX + 1) % ancho;
                     return mundo[t.posY][validaX(x)].estado;
-                case 4:
+                case 4://verificamos si hay astilla en la posicion 4
                     y = (t.posY + 1) % alto;
                     x = (t.posX + 1) % ancho;
                     return mundo[validaY(y)][validaX(x)].estado;
-                case 5:
+                case 5://verificamos si hay astilla en la posicion 5
                     y = (t.posY + 1) % alto;
                     return mundo[validaY(y)][t.posX].estado;
-                case 6:
+                case 6://verificamos si hay astilla en la posicion 6
                     y = (t.posY + 1) % alto;
                     x = (t.posX - 1) % ancho;
                     return mundo[validaY(y)][validaX(x)].estado;
-                case 7:
+                case 7://verificamos si hay astilla en la posicion 7
                     x = (t.posX - 1) % ancho;
                     return mundo[t.posY][validaX(x)].estado;
                 default:
@@ -362,7 +362,10 @@ public class Termitas extends PApplet {
             // Hint: El parametro direccion solo puede ser un valor entre 0-7.
             // Hint: mundo[t.posY][t.posX].estado Nos indica si hay una astilla en la misma posicion que la termita. 
         }
-
+        
+        //Cuando la x es menor que el ancho de la cuadricula
+        // le sumamos el ancho para que el valor sea un numero valido
+        //dentro de lo que estamos verificando
         public int validaX(int x) {
             if (x < 0) {
                 x += ancho;
@@ -370,6 +373,9 @@ public class Termitas extends PApplet {
             return x;
         }
 
+        //Cuando la y es menor que el alto de la cuadricula
+        // le sumamos el alt para que el valor sea un numero valido
+        //dentro de lo que estamos verificando
         public int validaY(int y) {
             if (y < 0) {
                 y += alto;
@@ -391,38 +397,38 @@ public class Termitas extends PApplet {
          */
         void dejarAstilla(Termita t, int dir) {
             // ##### IMPLEMENTACION #####       
-            mundo[t.posY][t.posX].estado = true;
-            t.cargando = false;
+            mundo[t.posY][t.posX].estado = true;//verificamos si cumple que hay astilla
+            t.cargando = false; //cuando se deja la astilla 
             if (dir == 0) {
-                this.moverTermita(t, 4);
+                this.moverTermita(t, 4);//la direccion inversa de 0
                 return;
             }
             if (dir == 1) {
-                this.moverTermita(t, 5);
+                this.moverTermita(t, 5);//la direccion inversa de 1
                 return;
             }
             if (dir == 2) {
-                this.moverTermita(t, 6);
+                this.moverTermita(t, 6);//la direccion inversa de 2
                 return;
             }
             if (dir == 3) {
-                this.moverTermita(t, 7);
+                this.moverTermita(t, 7);//la direccion inversa de 3
                 return;
             }
             if (dir == 4) {
-                this.moverTermita(t, 0);
+                this.moverTermita(t, 0);//la direccion inversa de 4
                 return;
             }
             if (dir == 5) {
-                this.moverTermita(t, 1);
+                this.moverTermita(t, 1);//la direccion inversa de 5
                 return;
             }
             if (dir == 6) {
-                this.moverTermita(t, 2);
+                this.moverTermita(t, 2);//la direccion inversa de 6
                 return;
             }
             if (dir == 7) {
-                this.moverTermita(t, 3);
+                this.moverTermita(t, 3);//la direccion inversa de 7
             }
             // Hint: Indicar en el mundo que hay una astilla, indicar a la termita que está cargando una astilla y mover a la termita
             //    en la direccion opuesta a la que está mirando (variable 'dir')
@@ -439,7 +445,7 @@ public class Termitas extends PApplet {
             // ##### IMPLEMENTACION ###### 
             mundo[t.posY][t.posX].estado = true;
             t.cargando = false;
-            this.moverTermita(t, rnd.nextInt(8));
+            this.moverTermita(t, rnd.nextInt(8));//movemos la termina a un numero aleatoria de 0-7
             // Hint: Marcar casilla para indicar la astilla, indicar que la termita carga una astilla y moverTermita aleatoriamente.
         }
 
@@ -452,9 +458,11 @@ public class Termitas extends PApplet {
          * @param t La termita que va a soltar astilla en el modelo.
          */
         void dejarAstillaConSalto(Termita t) {
-            ArrayList a = new ArrayList();
+            ArrayList a = new ArrayList();//Creamos un arraylist para guardar las opciones disponibles(vacias)
+            //al rededor de la termita t
             mundo[t.posY][t.posX].estado = true;
             t.cargando = false;
+            //verifica que no haya astilla en las posiciones al rededor 
             if (!hayAstilla(t, 0)) {
                 a.add(0);
             }
@@ -478,9 +486,10 @@ public class Termitas extends PApplet {
             }
             if (!hayAstilla(t, 7)) {
                 a.add(7);
-            }
+            }            
             int libre=a.size();
-            out.println(libre);
+            //out.println(libre);
+            //verificamos que haya espacios libres
             if(libre > 0)
                 this.moverTermita(t, rnd.nextInt(libre));
             // ##### IMPLEMENTACION #####
