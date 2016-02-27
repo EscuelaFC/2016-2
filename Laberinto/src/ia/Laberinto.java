@@ -32,7 +32,7 @@ public class Laberinto extends PApplet {
     }
     
     @Override
-    public void draw() {
+    public void draw() {        
         for (int i = 0; i < alto; i++) {
             for (int j = 0; j < ancho; j++) {
                 fill(50);                
@@ -41,7 +41,7 @@ public class Laberinto extends PApplet {
         }
         
         // Pintar informacion del modelo en la parte inferior de la ventana.        
-        rect(0, alto * celda, (ancho * celda), 3);
+        rect(0, alto * celda, (ancho * celda), 32);
         fill(255);
         textFont(fuente, 10);
         text("Dimension:\n " + modelo.ancho + " X " + modelo.alto, 5, (alto * celda) + 12);                    
