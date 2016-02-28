@@ -15,9 +15,9 @@ import processing.core.PFont;
 public class Laberinto extends PApplet {
     PFont fuente;
      
-    int alto = 100;
-    int ancho = 100;
-    int celda = 6;        
+    int alto = 10;
+    int ancho = 10;
+    int celda = 10;            
     Molde modelo;
 
     public void settings() {
@@ -32,68 +32,30 @@ public class Laberinto extends PApplet {
     }
     
     @Override
-    public void draw() {        
+    public void draw() {
         for (int i = 0; i < alto; i++) {
-            for (int j = 0; j < ancho; j++) {
-                fill(50);                
-                rect(j * modelo.tamanio, i * modelo.tamanio, modelo.tamanio, modelo.tamanio);
+            for (int j = 0; j < ancho; j++) {                        
+                    fill(50);                
+                    rect(j * modelo.tamanio, i * modelo.tamanio, modelo.tamanio, modelo.tamanio);
+            }
+        }                
+        for (Camino c : modelo.camino) {
+            if (c.pintada) {
+                fill(255, 0, 0);
+                rect(c.posX * modelo.tamanio, c.posY * modelo.tamanio, modelo.tamanio, modelo.tamanio);
+            } else {
+                fill(0, 255, 0);
+                rect(c.posX * modelo.tamanio, c.posY * modelo.tamanio, modelo.tamanio, modelo.tamanio);
             }
         }
-        
-        // Pintar informacion del modelo en la parte inferior de la ventana.        
+        //stroke(0,0,0,0);        
+        fill(50);
         rect(0, alto * celda, (ancho * celda), 32);
         fill(255);
         textFont(fuente, 10);
-        text("Dimension:\n " + modelo.ancho + " X " + modelo.alto, 5, (alto * celda) + 12);                    
-    }
-    
-    /**
-     * Representación de cada celda de la cuadrícula.
-     */
-    class Celda {
-
-        int celdaX, celdaY;
-        
-        /**
-         * Constructor de una celda
-         *
-         * @param celdaX Coordenada en x
-         * @param celdaY Coordenada en y       
-         * 
-         */
-        Celda(int celdaX, int celdaY) {
-            this.celdaX = celdaX;
-            this.celdaY = celdaY;            
-        }
+        text("Dimension:\n " + modelo.ancho + " X " + modelo.alto, 5, (alto * celda) + 12);                            
     }
 
-    class Molde {
-
-        int ancho, alto;  // Tamaño de celdas a lo largo y ancho de la cuadrícula.
-        int tamanio;  // Tamaño en pixeles de cada celda.        
-        Celda[][] mundo;  // Mundo de celdas donde habitan las astillas.        
-
-        /**
-         * Constructor del modelo
-         *
-         * @param ancho Cantidad de celdas a lo ancho en la cuadricula.
-         * @param ancho Cantidad de celdas a lo largo en la cuadricula.
-         * @param tamanio Tamaño (en pixeles) de cada celda cuadrada que compone
-         * la cuadricula.         
-         */
-        Molde(int ancho, int alto, int tamanio) {
-            this.ancho = ancho;
-            this.alto = alto;
-            this.tamanio = tamanio;            
-            mundo = new Celda[alto][ancho];
-            for (int i = 0; i < alto; i++) {
-                for (int j = 0; j < ancho; j++) {
-                    mundo[i][j] = new Celda(i, j);
-                }
-            }                        
-        }       
-    }
-    
     /**
      * @param args the command line arguments
      */
