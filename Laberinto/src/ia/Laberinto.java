@@ -39,12 +39,12 @@ public class Laberinto extends PApplet {
                     rect(j * modelo.tamanio, i * modelo.tamanio, modelo.tamanio, modelo.tamanio);
             }
         }                
-        for (Camino c : modelo.camino) {
+        for(Camino c : modelo.camino) {
             if (c.pintada) {
-                fill(255, 0, 0);
+                fill(255, 30, 40);
                 rect(c.posX * modelo.tamanio, c.posY * modelo.tamanio, modelo.tamanio, modelo.tamanio);
             } else {
-                fill(0, 255, 0);
+                fill(255);
                 rect(c.posX * modelo.tamanio, c.posY * modelo.tamanio, modelo.tamanio, modelo.tamanio);
             }
         }

@@ -5,6 +5,7 @@
  */
 package ia;
 
+import static java.lang.System.out;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -40,6 +41,7 @@ public class Molde {
         }
         camino = new ArrayList<Camino>();
         camino.add(new Camino(rnd.nextInt(ancho), rnd.nextInt(alto), rnd.nextInt(4)));
-        
+        camino.get(0).pintada=true;
+        out.println(camino.get(0).direccion);
     }
 }
