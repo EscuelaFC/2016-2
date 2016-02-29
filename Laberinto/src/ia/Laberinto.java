@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package ia;
+import static java.lang.System.out;
 import processing.core.PApplet;
 import processing.core.PFont;
 
@@ -39,21 +40,22 @@ public class Laberinto extends PApplet {
                     rect(j * modelo.tamanio, i * modelo.tamanio, modelo.tamanio, modelo.tamanio);
             }
         }                
-        for(Camino c : modelo.camino) {
+        for(Camino c : modelo.camino){            
             if (c.pintada) {
                 fill(255, 30, 40);
-                rect(c.posX * modelo.tamanio, c.posY * modelo.tamanio, modelo.tamanio, modelo.tamanio);
+                rect(c.posX * modelo.tamanio, c.posY * modelo.tamanio, modelo.tamanio, modelo.tamanio);                
             } else {
-                fill(255);
+                fill(50);
                 rect(c.posX * modelo.tamanio, c.posY * modelo.tamanio, modelo.tamanio, modelo.tamanio);
             }
+//            modelo.moverCamino(c, c.direccion);
         }
         //stroke(0,0,0,0);        
         fill(50);
         rect(0, alto * celda, (ancho * celda), 32);
         fill(255);
         textFont(fuente, 10);
-        text("Dimension:\n " + modelo.ancho + " X " + modelo.alto, 5, (alto * celda) + 12);                            
+        text("Dimension:\n " + modelo.ancho + " X " + modelo.alto, 5, (alto * celda) + 12);                
     }
 
     /**
