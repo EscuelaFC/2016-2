@@ -11,21 +11,18 @@ package ia;
  */
 public class Celda {
 
-    int celdaX;
-    int celdaY;
-    boolean marcada;
+    int celdaX, celdaY;
+    boolean visitada;
+    boolean queda;
+    boolean paredArriba = true;
+    boolean paredAbajo = true;
+    boolean paredIzq = true;
+    boolean paredDer = true;
 
-    /**
-     * Constructor de una celda
-     *
-     * @param celdaX Coordenada en x
-     * @param celdaY Coordenada en y
-     * @param marcada che
-     *
-     */
-    Celda(int celdaX, int celdaY, boolean marcada) {
+    public Celda(int celdaX, int celdaY, boolean visitada, boolean queda) {
         this.celdaX = celdaX;
         this.celdaY = celdaY;
-        this.marcada = marcada;
+        this.visitada = visitada;
+        this.queda = queda;
     }
 }

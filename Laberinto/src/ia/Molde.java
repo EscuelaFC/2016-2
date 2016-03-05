@@ -15,11 +15,13 @@ import java.util.Stack;
  * @author jon
  */
 public class Molde {
-
+    
+    int posX,posY;
     int ancho, alto;  // Tamaño de celdas a lo largo y ancho de la cuadrícula.
-    int tamanio;  // Tamaño en pixeles de cada celda.      
-    Celda[][] mundo;  // Mundo de celdas donde habitan las astillas.        
-    ArrayList<Camino> camino;
+    int tamanio;  // Tamaño en pixeles de cada celda.
+    int generacion;
+    Celda[][] mundo; 
+    ArrayList<Celda> camino;
     Random rnd=new Random();
 
     /**
@@ -38,36 +40,34 @@ public class Molde {
         camino = new ArrayList<>();
         for (int i = 0; i < alto; i++) {
             for (int j = 0; j < ancho; j++) {
-                mundo[i][j] = new Celda(i, j, false);
-                camino.add(new Camino(i,j,rnd.nextInt(4)));
+                mundo[i][j] = new Celda(i, j, true, true);
+                camino.add(new Celda(i,j,false,true));
             }
         }
-        camino.get(rnd.nextInt(camino.size())).pintada=true;
-        //camino.add(new Camino(rnd.nextInt(ancho), rnd.nextInt(alto), rnd.nextInt(4)));        
     }
     
-    public void moverCamino(Camino c, int direccion) {
-            switch (direccion) {
-                case 0:
-                    c.posX = (c.posX );
-                    c.posY = (c.posY-1);
-                    c.direccion = direccion;
-                    break;
-                case 1:
-                    c.posX = (c.posX+1);
-                    c.posY = (c.posY );
-                    c.direccion = direccion;
-                    break;
-                case 2:
-                    c.posX = (c.posX);
-                    c.posY = (c.posY +1);
-                    c.direccion = direccion;
-                    break;
-                case 3:
-                    c.posX = (c.posX-1);
-                    c.posY = (c.posY);
-                    c.direccion = direccion;                    
-                    break;
-        }
-    }        
+//    public void moverCamino(Celda c, int direccion) {
+//            switch (direccion) {
+//                case 0:
+//                    c.posX = (c.posX );
+//                    c.posY = (c.posY-1);
+//                    c.direccion = direccion;
+//                    break;
+//                case 1:
+//                    c.posX = (c.posX+1);
+//                    c.posY = (c.posY );
+//                    c.direccion = direccion;
+//                    break;
+//                case 2:
+//                    c.posX = (c.posX);
+//                    c.posY = (c.posY +1);
+//                    c.direccion = direccion;
+//                    break;
+//                case 3:
+//                    c.posX = (c.posX-1);
+//                    c.posY = (c.posY);
+//                    c.direccion = direccion;
+//                    break;
+//        }
+//    }
 }
