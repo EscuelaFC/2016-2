@@ -43,8 +43,6 @@ sumList (x:xs) = suma x (sumList(xs))
 
 --Ordenar
 
-:q
-
 --Funciones Auxiliares
 convierte :: Nat->Integer
 convierte Cero = 0
