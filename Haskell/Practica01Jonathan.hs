@@ -32,7 +32,8 @@ length1 (x:xs) = 1+(length1 xs)
 minList:: [Nat]-> Nat
 minList [Cero] = Cero
 minList [Suc x] = Suc x
-
+minList (x:xs) = if (menor x (minList xs))==True 
+					then x else minList(xs)
 
 sumList :: [Nat]-> Nat
 sumList []=Cero
@@ -42,7 +43,7 @@ sumList (x:xs) = suma x (sumList(xs))
 
 --Ordenar
 
-
+:q
 
 --Funciones Auxiliares
 convierte :: Nat->Integer
