@@ -1,3 +1,7 @@
+--Abrego Alvarez Jonathan
+--jo.ab.al@ciencias.unam.mx
+--308043305
+
 data Nat = Cero | Suc Nat deriving Show
 
 suma :: Nat ->Nat->Nat 
@@ -28,7 +32,6 @@ length1 :: [Nat]->Integer
 length1 []=0
 length1 (x:xs) = 1+(length1 xs)
 
---MinList
 minList:: [Nat]-> Nat
 minList [Cero] = Cero
 minList [Suc x] = Suc x
@@ -41,10 +44,10 @@ sumList [Cero] = Cero
 sumList [Suc x] = Suc x
 sumList (x:xs) = suma x (sumList(xs))
 
---Ordenar
 ordena :: [Nat] -> [Nat]
 ordena [] = []
 ordena (x:xs) = insert x (ordena xs)
+
 
 --Funciones Auxiliares
 insert :: Nat->[Nat]->[Nat]
