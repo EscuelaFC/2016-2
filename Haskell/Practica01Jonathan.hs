@@ -2,30 +2,30 @@
 --jo.ab.al@ciencias.unam.mx
 --308043305
 
-data Nat = Cero | Suc Nat deriving Show
+data Nat = O | S Nat deriving Show
 
 suma :: Nat ->Nat->Nat 
-suma x Cero = x
-suma x (Suc y)  = suma (Suc x) y
+suma x O = x
+suma x (S y)  = suma (S x) y
 
 producto :: Nat -> Nat -> Nat
-producto x Cero = Cero
-producto x (Suc Cero) = x
-producto x (Suc y) = suma x (producto x y)
+producto x O = O
+producto x (S O) = x
+producto x (S y) = suma x (producto x y)
 
 potencia :: Nat -> Nat -> Nat
-potencia x Cero = (Suc Cero)
-potencia x (Suc Cero) = x
-potencia x (Suc y ) = potencia (producto x x) y
+potencia x O = (S O)
+potencia x (S O) = x
+potencia x (S y ) = potencia (producto x x) y
 
 factorial :: Nat -> Nat
-factorial Cero = (Suc Cero)
-factorial (Suc Cero) = (Suc Cero)
-factorial  (Suc x)  =  producto (Suc x) (factorial x)
+factorial O = (S O)
+factorial (S O) = (S O)
+factorial  (S x)  =  producto (S x) (factorial x)
 
 reversa :: [Nat] -> [Nat]
-reversa [Cero] = [Cero]
-reversa [Suc x] = [Suc x]
+reversa [O] = [O]
+reversa [S x] = [S x]
 reversa (x:xs) = (reversa xs)++[x]
 
 length1 :: [Nat]->Integer
@@ -33,15 +33,15 @@ length1 []=0
 length1 (x:xs) = 1+(length1 xs)
 
 minList:: [Nat]-> Nat
-minList [Cero] = Cero
-minList [Suc x] = Suc x
+minList [O] = O
+minList [S x] = S x
 minList (x:xs) = if (menorIgual x (minList xs))==True 
 					then x else minList(xs)
 
 sumList :: [Nat]-> Nat
-sumList []=Cero
-sumList [Cero] = Cero
-sumList [Suc x] = Suc x
+sumList []=O
+sumList [O] = O
+sumList [S x] = S x
 sumList (x:xs) = suma x (sumList(xs))
 
 ordena :: [Nat] -> [Nat]
@@ -51,26 +51,26 @@ ordena (x:xs) = insert x (ordena xs)
 
 --Funciones Auxiliares
 insert :: Nat->[Nat]->[Nat]
-insert Cero []= [Cero]
-insert (Suc e) [] = [Suc e]
+insert O []= [O]
+insert (S e) [] = [S e]
 insert e (x:xs)
 				| menorIgual e x = e:x:xs				
 				| otherwise = x:insert e xs
 
 convierte :: Nat->Integer
-convierte Cero = 0
-convierte (Suc x) = 1 +convierte x
+convierte O = 0
+convierte (S x) = 1 +convierte x
 
 revierte :: Integer -> Nat
-revierte 0 =Cero
-revierte (n + 1) = Suc (revierte n)
+revierte 0 =O
+revierte (n + 1) = S (revierte n)
 
 menorIgual:: Nat -> Nat -> Bool
-menorIgual Cero Cero= if (convierte Cero) == (convierte Cero) 
+menorIgual O O= if (convierte O) == (convierte O) 
 						then True else False
-menorIgual Cero (Suc n)= if (convierte Cero) < (convierte (Suc n)) 
+menorIgual O (S n)= if (convierte O) < (convierte (S n)) 
 						then True else False
-menorIgual (Suc n) Cero = if (convierte (Suc n)) < (convierte Cero)
+menorIgual (S n) O = if (convierte (S n)) < (convierte O)
 						then True else False
-menorIgual (Suc n) (Suc y) = if (convierte (Suc n)) <= (convierte (Suc y))
+menorIgual (S n) (S y) = if (convierte (S n)) <= (convierte (S y))
 						then True else False						
