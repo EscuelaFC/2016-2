@@ -18,7 +18,7 @@ public class Laberinto extends PApplet {
 
     PFont fuente;
     int alto = 21;
-    int ancho = 30;
+    int ancho = 15;
     int celda = 20;
     Modelo modelo;
 
