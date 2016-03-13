@@ -5,7 +5,6 @@
  */
 package ia;
 
-import static java.lang.System.out;
 import java.util.Random;
 import java.util.Stack;
 import processing.core.PApplet;
@@ -18,11 +17,12 @@ import processing.core.PFont;
 public class Laberinto extends PApplet {
 
     PFont fuente;
-    int alto = 11;
-    int ancho = 25;
+    int alto = 21;
+    int ancho = 30;
     int celda = 20;
     Modelo modelo;
     
+    @Override
     public void settings() {
         size( ancho*celda, (alto*celda)+32);
     }
@@ -69,6 +69,11 @@ public class Laberinto extends PApplet {
                 stroke(255);
             }
         }
+        fill(0);
+        rect(0, alto * celda, (ancho * celda), 32);
+        fill(255);
+        textFont(fuente, 10);
+        text("Cuadricula: " + modelo.ancho + " x " + modelo.alto, 5, (alto * celda) + 12);        
         modelo.creaLaberinto();
     }    
     
@@ -113,7 +118,7 @@ public class Laberinto extends PApplet {
       int direccion;
       Celda[][] mundo;
       Random rnd = new Random();
-      Stack<Celda> pila = new Stack<Celda>();
+      Stack<Celda> pila = new Stack<>();
       
 
       /** Constructor del modelo
