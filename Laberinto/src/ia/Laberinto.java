@@ -19,7 +19,7 @@ public class Laberinto extends PApplet {
 
     PFont fuente;
     int alto = 11;
-    int ancho = 11;
+    int ancho = 25;
     int celda = 20;
     Modelo modelo;
     
@@ -131,8 +131,8 @@ public class Laberinto extends PApplet {
             mundo[i][j] = new Celda(i,j);
           }
         }        
-        this.posX =rnd.nextInt(alto);
-        this.posY =rnd.nextInt(ancho);        
+        this.posX =rnd.nextInt(ancho);
+        this.posY =rnd.nextInt(alto);        
         pila.push(mundo[posY][posX]);
         mundo[posY][posX].visitada=true;       
       }
@@ -282,6 +282,13 @@ public class Laberinto extends PApplet {
             return true;
         }
         
+        /**
+         * Lo que realizamos es ver si aun se pude mover en caso
+         * de que no sea posible sacamos de la pila el ultimo elemento 
+         * y sobre ese verificamos si se puede mover, ademas de marcar
+         * cada casilla que se saca queda como<br>True</br>, es decir
+         * que ya quedo como parte del laberinto
+         */
         public void creaLaberinto(){                                                                                               
             try{
                 if(seMueve(posX,posY)==false){                                                        
