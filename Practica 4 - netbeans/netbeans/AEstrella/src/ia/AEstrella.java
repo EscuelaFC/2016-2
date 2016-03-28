@@ -5,6 +5,7 @@
  */
 package ia;
 
+import static java.lang.System.out;
 import processing.core.PApplet;
 import processing.core.PFont;
 
@@ -395,22 +396,29 @@ public class AEstrella extends PApplet {
              * es hay que generar sus sucesores, verificar en que lista se
              * encuentra y tomar la accion correspondiente.
              */
-            //falta verificar
-            nodoActual = listaAbierta.poll();
-            nodoActual.estado.situacion = Situacion.ACTUAL;
-            nodoPrevio.estado.situacion = Situacion.EN_LISTA_CERRADA;
-            listaCerrada.put(nodoPrevio.estado, nodoPrevio.estado);
-            for (NodoBusqueda n : nodoActual.getSucesores()) {
-                n.estado.situacion = Situacion.EN_LISTA_ABIERTA;
-                n.estado.gn = n.gn;
-                n.estado.calculaHeuristica(estadoFinal);
-                listaAbierta.offer(n);
+            if(resuelto == false){
+                nodoActual = listaAbierta.poll();
+                nodoActual.estado.situacion = Situacion.ACTUAL;
+                nodoPrevio.estado.situacion = Situacion.EN_LISTA_CERRADA;
+                listaCerrada.put(nodoPrevio.estado, nodoPrevio.estado);
+                if (!nodoActual.estado.equals(estadoFinal)) {
+                    for (NodoBusqueda nodo : nodoActual.getSucesores()) {                                                    
+                        if (!listaCerrada.containsValue(nodo.estado)) {
+                            nodo.estado.situacion = Situacion.EN_LISTA_ABIERTA;
+                            nodo.estado.gn = nodo.gn;
+                            nodo.estado.calculaHeuristica(estadoFinal);                        
+                            listaAbierta.offer(nodo);
+                        }
+                    }                    
+                    nodoPrevio = nodoActual;
+                }else
+                    resuelto=true;
             }
-            nodoPrevio = nodoActual;
         }
     }
 
-    static public void main(String args[]) {
+
+static public void main(String args[]) {
         PApplet.main(new String[]{"ia.AEstrella"});
     }
 
