@@ -384,35 +384,40 @@ public class AEstrella extends PApplet {
             listaAbierta.offer(nodoPrevio);
         }
 
-        void expandeNodoSiguiente() {
-            /**
-             * IMPLEMENTACION HINT: Deben verificar que el juego no este
-             * resuelto, despues tomar el primer nodo de la lista abierta (el
-             * nodo que tenga menor valor de la funcion f(n)), poner al nodo
-             * previo en la lista cerrada, modificando su situacion. Modificar
-             * la situacion del nodo actual, verificar si el nodo actual es
-             * igual al nodo final, si lo es decir que ya esta resuelto y
-             * cambiar de situacion a toda la familia del nodo final, si no lo
-             * es hay que generar sus sucesores, verificar en que lista se
-             * encuentra y tomar la accion correspondiente.
-             */
+        void expandeNodoSiguiente() {                                                                       
             if(resuelto == false){
                 nodoActual = listaAbierta.poll();
                 nodoActual.estado.situacion = Situacion.ACTUAL;
                 nodoPrevio.estado.situacion = Situacion.EN_LISTA_CERRADA;
                 listaCerrada.put(nodoPrevio.estado, nodoPrevio.estado);
                 if (!nodoActual.estado.equals(estadoFinal)) {
-                    for (NodoBusqueda nodo : nodoActual.getSucesores()) {                                                    
+                    for (NodoBusqueda nodo : nodoActual.getSucesores()) {                                  
                         if (!listaCerrada.containsValue(nodo.estado)) {
                             nodo.estado.situacion = Situacion.EN_LISTA_ABIERTA;
-                            nodo.estado.gn = nodo.gn;
-                            nodo.estado.calculaHeuristica(estadoFinal);                        
-                            listaAbierta.offer(nodo);
+                            boolean guardado = false; //Una bandera para evitar que se guarde doble
+                            for(NodoBusqueda n : listaAbierta){
+                                if(n.equals(nodo)){                                                                    
+                                    if(n.getFn() >= nodo.getFn()){                                                                        
+                                        listaAbierta.remove(n);                                    
+                                        nodo.estado.gn = nodo.gn;
+                                        nodo.estado.calculaHeuristica(estadoFinal);                                        
+                                        guardado=true;
+                                        listaAbierta.offer(nodo);
+                                    }                                                                
+                                    break;
+                                }
+                            }
+                            if(guardado==false){
+                                nodo.estado.gn = nodo.gn;
+                                nodo.estado.calculaHeuristica(estadoFinal);                        
+                                listaAbierta.offer(nodo);
+                            }                            
                         }
-                    }                    
+                    }                                        
                     nodoPrevio = nodoActual;
-                }else
-                    resuelto=true;
+                }else{
+                    resuelto=true;                                        
+                }
             }
         }
     }
