@@ -386,44 +386,45 @@ public class AEstrella extends PApplet {
 
         void expandeNodoSiguiente() {
             if (resuelto == false) {
-                nodoActual = listaAbierta.poll();
-                nodoActual.estado.situacion = Situacion.ACTUAL;
-                nodoPrevio.estado.situacion = Situacion.EN_LISTA_CERRADA;
-                listaCerrada.put(nodoPrevio.estado, nodoPrevio.estado);
-                if (!nodoActual.estado.equals(estadoFinal)) {
-                    for (NodoBusqueda nodo : nodoActual.getSucesores()) {
-                        if (!listaCerrada.containsValue(nodo.estado)) {
-                            nodo.estado.situacion = Situacion.EN_LISTA_ABIERTA;
+                nodoActual = listaAbierta.poll();//sacamos el elemento actual de la lista abierta
+                nodoActual.estado.situacion = Situacion.ACTUAL; //cambiamos la situacion para indicar que es sobre el que estamos
+                nodoPrevio.estado.situacion = Situacion.EN_LISTA_CERRADA; //cambiamos la situacion antes de guardarlo en la lista cerrada
+                listaCerrada.put(nodoPrevio.estado, nodoPrevio.estado); //lo guardamos
+                if (!nodoActual.estado.equals(estadoFinal)) { //verificamos que nuestro nodo actual no sea nuestro estado final
+                    for (NodoBusqueda nodo : nodoActual.getSucesores()) { // exploramos los nodos adyacentes del nodo actual
+                        if (!listaCerrada.containsValue(nodo.estado)) { //vemos que la lista cerrada no contenga los nodos que estamos explorando
+                            nodo.estado.situacion = Situacion.EN_LISTA_ABIERTA; //antes de guardarlos en la lista abierta cambiamos su situacion
                             boolean guardado = false; //Una bandera para evitar que se guarde doble
-                            for (NodoBusqueda n : listaAbierta) {
-                                if (n.equals(nodo)) {
-                                    if (n.compareTo(nodo) >= 0) {
-                                        listaAbierta.remove(n);
-                                        nodo.estado.gn = nodo.gn;
+                            for (NodoBusqueda n : listaAbierta) { //buscamos sobre la lista abierta 
+                                if (n.equals(nodo)) { //si encontramos el mismo nodo ya en la lista abierta 
+                                    if (n.compareTo(nodo) >= 0) { // comparamos para ver cual es mejor para nuestro proposito
+                                        listaAbierta.remove(n); //como es mejor removemos el que esta en la lista abierta
+                                        nodo.estado.gn = nodo.gn; //actualizamos los valores correspondientes del que agregaremos
                                         nodo.estado.calculaHeuristica(estadoFinal);
-                                        listaAbierta.offer(nodo);
+                                        listaAbierta.offer(nodo); //guardamos
                                     }
-                                    guardado = true;
-                                    break;
+                                    guardado = true; //cambiamos el esta de la bandera
+                                    break;//cortamos el ciclo puesto que ya encontramos
                                 }
                             }
-                            if (guardado == false) {
-                                nodo.estado.gn = nodo.gn;
+                            if (guardado == false) {//si no existe ningun nodo igual en la lista abierta
+                                nodo.estado.gn = nodo.gn; //actualizamos los valores correspondientes
                                 nodo.estado.calculaHeuristica(estadoFinal);
-                                listaAbierta.offer(nodo);
+                                listaAbierta.offer(nodo);//guardamos
                             }
                         }
                     }
-                    nodoPrevio = nodoActual;
+                    nodoPrevio = nodoActual;//actualizamos el nodo para poder realizar la siguiente busqueda
                 } else {
+                    //una vez que llegamos a la meta marcamos el camino 
                     try {
                         resuelto = true;
-                        NodoBusqueda aux;
+                        //decimos que el nodo actual es parte de la solucion
                         nodoActual.estado.situacion = Situacion.EN_SOLUCION;
-                        for (int i = 0; i < listaCerrada.size() - 1; i++) {
-                            if (nodoActual.estado.situacion == Situacion.EN_SOLUCION) {
-                                nodoActual.padre.estado.situacion = Situacion.EN_SOLUCION;
-                                nodoActual = nodoActual.padre;
+                        for (int i = 0; i < listaCerrada.size() - 1; i++) {//iteramos sobre nuestra lista cerrada
+                            if (nodoActual.estado.situacion == Situacion.EN_SOLUCION) {//comprobamos que nuestro nodo actual ya es parte de la solucion
+                                nodoActual.padre.estado.situacion = Situacion.EN_SOLUCION;//entonces el padre del actual tambien forma parte de la solucion
+                                nodoActual = nodoActual.padre;//nos colocamos sobre nuestro padre del nodo actual, para poder seguir construyendo nuestro camino                              
                             }
                         }
                     } catch (Exception e) {
