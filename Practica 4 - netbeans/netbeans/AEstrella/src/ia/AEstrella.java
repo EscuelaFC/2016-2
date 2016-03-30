@@ -208,8 +208,10 @@ public class AEstrella extends PApplet {
         void calculaHeuristica(Mosaico meta) {
             int x = meta.columna - columna;
             int y = meta.renglon - renglon;
-            x = x > 0 ? x : (x *= -1);
-            y = y > 0 ? y : (y *= -1);
+            x = x > 0 ? x : (x *= -1);//Si x es mayor que sero x se queda con el valor calculado
+            //de ser menor, simplemente lo multiplicamos por -1
+            y = y > 0 ? y : (y *= -1);//Si y es mayor que sero y se queda con el valor calculado
+            //de ser menor, simplemente lo multiplicamos por -1
             hn = (x + y) * 10;
         }
 
