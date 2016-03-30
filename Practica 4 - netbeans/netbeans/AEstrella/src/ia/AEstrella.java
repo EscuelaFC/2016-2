@@ -207,10 +207,10 @@ public class AEstrella extends PApplet {
          */
         void calculaHeuristica(Mosaico meta) {
             int x = meta.columna - columna;
-            int y = meta.renglon - renglon;            
-            x = x > 0 ? x :(x*=-1);
-            y = y > 0 ? y :(y*=-1);            
-            hn = (x+y) * 10;
+            int y = meta.renglon - renglon;
+            x = x > 0 ? x : (x *= -1);
+            y = y > 0 ? y : (y *= -1);
+            hn = (x + y) * 10;
         }
 
         /**
@@ -384,46 +384,57 @@ public class AEstrella extends PApplet {
             listaAbierta.offer(nodoPrevio);
         }
 
-        void expandeNodoSiguiente() {                                                                       
-            if(resuelto == false){
+        void expandeNodoSiguiente() {
+            if (resuelto == false) {
                 nodoActual = listaAbierta.poll();
                 nodoActual.estado.situacion = Situacion.ACTUAL;
                 nodoPrevio.estado.situacion = Situacion.EN_LISTA_CERRADA;
                 listaCerrada.put(nodoPrevio.estado, nodoPrevio.estado);
                 if (!nodoActual.estado.equals(estadoFinal)) {
-                    for (NodoBusqueda nodo : nodoActual.getSucesores()) {                                  
+                    for (NodoBusqueda nodo : nodoActual.getSucesores()) {
                         if (!listaCerrada.containsValue(nodo.estado)) {
                             nodo.estado.situacion = Situacion.EN_LISTA_ABIERTA;
                             boolean guardado = false; //Una bandera para evitar que se guarde doble
-                            for(NodoBusqueda n : listaAbierta){
-                                if(n.equals(nodo)){                                                                    
-                                    if(n.getFn() >= nodo.getFn()){                                                                        
-                                        listaAbierta.remove(n);                                    
+                            for (NodoBusqueda n : listaAbierta) {
+                                if (n.equals(nodo)) {
+                                    if (n.compareTo(nodo) >= 0) {
+                                        listaAbierta.remove(n);
                                         nodo.estado.gn = nodo.gn;
-                                        nodo.estado.calculaHeuristica(estadoFinal);                                        
-                                        guardado=true;
+                                        nodo.estado.calculaHeuristica(estadoFinal);
                                         listaAbierta.offer(nodo);
-                                    }                                                                
+                                    }
+                                    guardado = true;
                                     break;
                                 }
                             }
-                            if(guardado==false){
+                            if (guardado == false) {
                                 nodo.estado.gn = nodo.gn;
-                                nodo.estado.calculaHeuristica(estadoFinal);                        
+                                nodo.estado.calculaHeuristica(estadoFinal);
                                 listaAbierta.offer(nodo);
-                            }                            
+                            }
                         }
-                    }                                        
+                    }
                     nodoPrevio = nodoActual;
-                }else{
-                    resuelto=true;                                        
+                } else {
+                    try {
+                        resuelto = true;
+                        NodoBusqueda aux;
+                        nodoActual.estado.situacion = Situacion.EN_SOLUCION;
+                        for (int i = 0; i < listaCerrada.size() - 1; i++) {
+                            if (nodoActual.estado.situacion == Situacion.EN_SOLUCION) {
+                                nodoActual.padre.estado.situacion = Situacion.EN_SOLUCION;
+                                nodoActual = nodoActual.padre;
+                            }
+                        }
+                    } catch (Exception e) {
+
+                    }
                 }
             }
         }
     }
 
-
-static public void main(String args[]) {
+    static public void main(String args[]) {
         PApplet.main(new String[]{"ia.AEstrella"});
     }
 
