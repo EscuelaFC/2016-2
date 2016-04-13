@@ -5,7 +5,6 @@
  */
 package ia;
 
-import static java.lang.System.out;
 import processing.core.PApplet;
 import processing.core.PFont;
 
