@@ -31,6 +31,9 @@ crossword(V1,V2,V3,H1,H2,H3):-devuelveV1(V1),devuelveV2(V2),devuelveV3(V3),devue
 
 /*Ejercicio 2*/
 
+busca(C,[H|Tail],V) :- V is C+H; busca(+(C,H),Tail,V); busca(C, Tail, V).
+
+cantex(L,V) :- busca(0,L,V).
 
 /*Ejercicio 3*/
 
@@ -47,6 +50,5 @@ reg3(Reg3):-vecinos(color4,color1),vecinos(color4,color2),Reg3=verde.
 reg4(Reg4):-vecinos(color3,color1),vecinos(color3,color4),vecinos(color3,color2),Reg4=amarrillo.
 reg5(Reg5):-vecinos(color2,color3),vecinos(color2,color4),Reg5=azul.
 reg6(Reg6):-vecinos(color4,color3),Reg6=verde.
-
 
 colorea(Reg1,Reg2,Reg3,Reg4,Reg5,Reg6):-reg1(Reg1),reg2(Reg2),reg3(Reg3),reg4(Reg4),reg5(Reg5),reg6(Reg6).
