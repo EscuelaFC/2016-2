@@ -34,25 +34,31 @@ def lista_vertices(c, m , n):
     return v            
 
 def lista_aristas(c, m, n):
-    e=[]    
-    for i in range(0,m**n):
+    e=[]#lista para guardar las aristas 
+    for i in range(0,m**n): 
         if c[i:i+n] not in e and len(c[i:i+n])==n:
             e.insert(i,c[i:i+n])               
     return e
 
 def grafica(c,m,n):
-    dot = Digraph(format='pdf')
+    dot = Digraph(name='Proyecto',format='pdf')
     ver=lista_vertices(c, m , n)
     for i in range(0,len(ver)):
         dot.node(ver[i],ver[i])          
     for i in range(0,len(ver)):
         elemento = ver[i]        
         for j in range(0,len(ver)):
-            elemento2 = ver[j]
-            #Desde aqui
+            elemento2 = ver[j]            
             arista=elemento[0:1]+elemento2[0:(n-1)]            
             if arista[0:(n-1)]==elemento and arista[1:n]==elemento2:
-                dot.edge(elemento,elemento2,label=arista)        
+                dot.edge(elemento,elemento2,label=arista)    
+    b =""
+    for i in range(0,len(c)):        
+        if len(c[i:n+i]) == n:
+            aux=c[i:n+i]            
+            b+=aux[0:1]
+    dot.body.append(r'label ='+b)
+    dot.body.append('fontsize=12')
     dot.render(view=True)        
 
 def main():
@@ -66,7 +72,7 @@ def main():
         print "Por ejmeplo:\npython "+ sys.argv[0] + " 2 3"
         quit()        
     #llamada de metodo para calcular la secuencia de G_{m,n}    
-    print de_bruijn(int(m),int(n))    
+    #print de_bruijn(int(m),int(n))    
     grafica(de_bruijn(int(m),int(n)),int(m),int(n))        
 
 if __name__ == '__main__':
