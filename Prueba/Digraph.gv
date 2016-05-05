@@ -1,0 +1,14 @@
+digraph {
+	00 [label=00]
+	01 [label=01]
+	10 [label=10]
+	11 [label=11]
+		00 -> 00 [label=000]
+		00 -> 01 [label=001]
+		01 -> 10 [label=010]
+		01 -> 11 [label=011]
+		10 -> 00 [label=100]
+		10 -> 01 [label=101]
+		11 -> 10 [label=110]
+		11 -> 11 [label=111]
+}
