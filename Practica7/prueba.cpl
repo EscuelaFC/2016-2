@@ -1,0 +1,19 @@
+(deftemplate goal
+    (slot move)
+    (slot on-top-of)
+)
+
+(deffacts estado-inicial
+	(push-value pila1 A)  (push-value pila2 D)
+	(push-value pila1 B)  (push-value pila2 E)
+	(push-value pila1 C)  (push-value pila2 F)
+	(stack pila1 A B C)   (stack pila2 D E F)
+)
+
+(defrule push-value
+  ?push-value <- (push-value ?name ?value)
+  ?stack <- (stack ?name $?rest)
+  =>
+  (retract ?push-value ?stack)  
+  (assert (stack ?name $?rest))
+  (printout t "Pushing value " ?value crlf))
