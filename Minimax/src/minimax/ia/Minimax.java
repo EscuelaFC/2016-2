@@ -7,38 +7,27 @@ package minimax.ia;
 
 import static java.lang.System.out;
 import java.util.LinkedList;
-import java.util.Scanner;
 
 /**
  *
  * @author jon
  */
 public class Minimax {
-        
-    static int MARCA1 = 1; 
-    static int MARCA2 = 4; 
     
-    int profundidad = 0;       // Profundidad a la que se ha expandido el árbol.
-    int diametroMaximo = 1;    // Mayor número de estados expandidos a la misma profundidad.
-    
-    int anchoGato, altoGato;           // Dimensiones en pixeles del dibujo de cada gato.    
-    boolean genera = false;            // Bandera para solicitar la expansión del siguiente nivel.
-    
-    Gato gatoRaiz;                     // Estado inicial
-    LinkedList<Gato> listaAbierta = new LinkedList();  // Nodos en el nivel más profundo que no han sido expandidos.
-    
-    public Minimax(){
-        
+    public Minimax() {
+
     }
 
-    public class Gato {
+    static class Gato {
 
         int[][] tablero = new int[3][3];     // Tablero del juego
         Gato padre;                          // Quién generó este estado.
         LinkedList<Gato> sucesores;          // Posibles jugadas desde este estado.
-        boolean jugador1 = false;            // Jugador que tiró en este tablero.
+        boolean jugador1 = true;            // Jugador que tiró en este tablero.
         boolean hayGanador = false;          // Indica si la última tirada produjo un ganador.
         int tiradas = 0;                     // Número de casillas ocupadas.
+        static int MARCA1 = 1;
+        static int MARCA2 = 4;    
 
         /**
          * Constructor del estado inicial.
@@ -75,42 +64,45 @@ public class Minimax {
          * 
          * Esta función debe ser lo más eficiente posible para que la generación del árbol no sea demasiado lenta.
          */
-        public void hayGanador(int x, int y, int marca) {
+        public boolean hayGanador(int x, int y, int marca) {
             // Horizontal
             if (tablero[y][(x + 1) % 3] == marca && tablero[y][(x + 2) % 3] == marca) {
                 hayGanador = true;
-                return;
+                return hayGanador;
             }
             // Vertical
             if (tablero[(y + 1) % 3][x] == marca && tablero[(y + 2) % 3][x] == marca) {
                 hayGanador = true;
-                return;
+                return hayGanador;
             }
             // Diagonal
             if ((x == 1 && y != 1) || (y == 1 && x != 1)) {
-                return; // No pueden hacer diagonal
+                return hayGanador; // No pueden hacer diagonal
             }            // Centro y esquinas
             if (x == 1 && y == 1) {
                 // Diagonal \
                 if (tablero[0][0] == marca && tablero[2][2] == marca) {
                     hayGanador = true;
-                    return;
+                    return hayGanador;
                 }
                 if (tablero[2][0] == marca && tablero[0][2] == marca) {
                     hayGanador = true;
-                    return;
+                    return hayGanador;
                 }
             } else if (x == y) {
                 // Diagonal \
                 if (tablero[(y + 1) % 3][(x + 1) % 3] == marca && tablero[(y + 2) % 3][(x + 2) % 3] == marca) {
                     hayGanador = true;
-                    return;
+                    return hayGanador;
                 }
             } else // Diagonal /
-            if (tablero[(y + 2) % 3][(x + 1) % 3] == marca && tablero[(y + 1) % 3][(x + 2) % 3] == marca) {
-                hayGanador = true;
-                return;
+            {
+                if (tablero[(y + 2) % 3][(x + 1) % 3] == marca && tablero[(y + 1) % 3][(x + 2) % 3] == marca) {
+                    hayGanador = true;
+                    return hayGanador;
+                }
             }
+            return hayGanador;
         }
 
         /* Función auxiliar.
@@ -141,14 +133,10 @@ public class Minimax {
                 for (int j = 0; j < 3; j++) {
                     if (tablero[i][j] == 0) { //verificamos que la entrada i,j no tenga ya un X o O
                         Gato nuevo = new Gato(this);
-                        if (jugador1 == false) {
-                            nuevo.jugador1 = true;
-                        } else {
-                            nuevo.jugador1 = false;
-                        }
+                        nuevo.jugador1 = !jugador1;
                         nuevo.padre = this;
                         nuevo.tiraEn(j, i);
-                        out.println(recorreListaGatos(sucesores, nuevo));
+                        recorreListaGatos(sucesores, nuevo);
                         if (recorreListaGatos(sucesores, nuevo)) {
                             sucesores.add(nuevo);
                         }
@@ -156,7 +144,7 @@ public class Minimax {
                 }
             }
             this.sucesores = sucesores;
-            return sucesores;            
+            return sucesores;
         }
 
         public boolean recorreListaGatos(LinkedList<Gato> gatos, Gato verificar) {
@@ -168,181 +156,132 @@ public class Minimax {
             return true;
         }
         
-        public boolean esIgual(Gato otro) {
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
-                    if (tablero[i][j] != otro.tablero[i][j]) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-
-        public boolean esSimetricoDiagonalInvertida(Gato otro) {
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
-                    if (this.tablero[i][j] != otro.tablero[j][i]) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-
-        public boolean esSimetricoDiagonal(Gato otro) {
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
-                    if (this.tablero[i][j] != otro.tablero[2 - j][2 - i]) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-
-        public boolean esSimetricoVerticalmente(Gato otro) {            
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
-                    if (this.tablero[i][j] != otro.tablero[i][2 - j]) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-
-        public boolean esSimetricoHorizontalmente(Gato otro) {
-            for (int i = 0; i < 2; i++) {
-                for (int j = 0; j < 3; j++) {
-                    if (this.tablero[i][j] != otro.tablero[2 - i][j]) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-
-        public boolean esSimetrico90(Gato otro) {
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
-                    if (this.tablero[i][j] != otro.tablero[j][2 - i]) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-        
-        public boolean esSimetrico180(Gato otro) {
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
-                    if (this.tablero[i][j] != otro.tablero[2 - i][2 - j]) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-        
-        public boolean esSimetrico270(Gato otro) {
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
-                    if (this.tablero[i][j] != otro.tablero[2 - j][i]) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-        
         @Override
-        public boolean equals(Object o) {
-            Gato otro = (Gato) o;
-            if (esIgual(otro)) {
-                return true;
-            }
-
-            if (esSimetricoDiagonalInvertida(otro)) {
-                return true;
-            }
-            if (esSimetricoDiagonal(otro)) {
-                return true;
-            }
-            if (esSimetricoVerticalmente(otro)) {
-                return true;
-            }
-            if (esSimetricoHorizontalmente(otro)) {
-                return true;
-            }
-            if (esSimetrico90(otro)) {
-                return true;
-            }
-            if (esSimetrico180(otro)) {
-                return true;
-            }
-            if (esSimetrico270(otro)) {
-                return true;
-            }
-
-            return false;
-        }
-
-        @Override
-        public String toString() {
-            char simbolo = jugador1 ? 'o' : 'x';
+        public String toString(){            
             String gs = "";
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
-                    gs += tablero[i][j] + " ";
+            for(int i = 0; i < 3; i++){
+                for(int j = 0; j < 3; j++){
+                    gs += ((tablero[i][j] == MARCA2) ? 'x' : (tablero[i][j] == MARCA1) ? 'o' : "_") + " ";
                 }
                 gs += '\n';
             }
             return gs;
         }
-    }
-    
-    public void pureba(){
-        Gato g = new Gato();
-        g.jugador1=true; 
-        g.tiraEn(0, 0);
-        out.println(g.tiradas);       
-        out.println(g.toString());
-        g.jugador1=false; 
-        g.tiraEn(0, 2);
-        out.println(g.toString());
-    }
-    
-    public void generaSiguienteNivel() {
-        // Si ya se alcanzó la profundidad máxima (9 jugadas) no hace nada.
-        if (profundidad >= 9) {
-            return;
+        
+        /**
+         * Determina si el estado que le pasamos requerira un minimo o maximo al numero
+         * de tiradas que hay en el tablero puesto que si lo vemos como un arbol
+         *       Nivel 0:Max      Gato vacio                      
+         *       Nivel 1:Min      Todos los gatos con 1 tirada 
+         *       Nivel 2:Max      Todos los gatos con 2 tiradas
+         *            :
+         *            :
+         *       Nivel 8:Max      Todos lo gatos con 8 tiras
+         * Entonces si hay un numero par de tiradas nuestro estado necesitara un max
+         * y caso analogo si hay un numero impar de tiradas nuestro estada necesitara un min
+         * @param estado El gato que pasamos con X numero de tiradas         
+         * @return booleano si el gato esta en un nivel max
+         */
+        public boolean esMaximo(Gato estado){            
+            if(devuelveNumTiradas(estado)%2==0)
+                return true;
+            return false;
+        }                
+        
+        /**
+         * Puesto que le pasamos un estado ya definido el numero de 
+         * tiradas no se actualiza a la cantidad de tiradas que hay en 
+         * el tablero que le vayamos a pasar
+         * @param estado
+         * @return 
+         */
+        public int devuelveNumTiradas(Gato estado){            
+            int valor=0;
+            for(int i=0;i<3 ;i++)
+                for(int j=0;j<3;j++){                      
+                    if(estado.tablero[i][j]==1 || estado.tablero[i][j]==4){                        
+                        valor++;
+                    } 
+                }                                                    
+            return valor;
         }
-        // Genera sucesores.
-        int numGatos = listaAbierta.size();
-        for (int i = 0; i < numGatos; i++) {
-            Gato actual = listaAbierta.remove();
-            LinkedList<Gato> sucesores = actual.generaSucesores();
-            if (sucesores != null) {
-                listaAbierta.addAll(sucesores);
-            }
+        
+        /**
+         * Con base al gato que le pasemos elegiremos la opcion que mas le convenga 
+         * cabe resaltar que el jugador 1 siempre tirara con X mientras que el jugador 
+         * 2 jugara con O, por lo que si hay un numero de tiradas par le tocaria 
+         * al jugador con X (jugaror1) mientras que si hay un numero impar de tiradas 
+         * tira el jugaro con O (jugador2)
+         * @param estado
+         * @return gato con la posible accion a tomar 
+         */
+        public Gato seleccionaMejor(Gato estado){                        
+            if(estado.devuelveNumTiradas(estado)==9 || estado.hayGanador)
+                return estado;                                    
+            int auxi=0;
+            int auxj=0;
+            int tirada=0;
+            if(esMaximo(estado)){                
+                for(int j=0;j<3 ;j++){
+                    for(int i=0;i<3;i++){
+                        if(estado.tablero[j][i] == 0 && estado.hayGanador(j, i, MARCA2)==true){                                                         
+                            estado.tablero[j][i]=4;                                
+                            return estado;                            
+                        }else{
+                            tirada=4;
+                            auxi=i;
+                            auxj=j;
+                        }
+                    }
+                }             
+            }else{                                
+                for(int j=0;j<3 ;j++){
+                    for(int i=0;i<3;i++){                            
+                        if(estado.tablero[j][i] == 0 && estado.hayGanador(j, i, MARCA2)==true){                                                         
+                            estado.tablero[j][i]=1;                                
+                            return estado;                            
+                        }else{
+                            tirada=1;
+                            auxi=i;
+                            auxj=j;
+                        }
+                    }
+                }                                
+            }                
+            estado.tablero[auxj][auxi]=tirada;
+            return estado;
         }
-        // Actualiza variables de estado para saber en qué punto se encuentra el proceso
-        // y si hay que hacer ajustes al lienzo de dibujo.
-        profundidad++;
-        numGatos = listaAbierta.size();
-        if (numGatos > diametroMaximo) {
-            diametroMaximo = numGatos;
+        
+        public void estado() {                        
+            //Segun recuerdo siempre tira primero X o ya ni se
+            System.out.println("Estado1: ");
+            Gato g = new Gato();            
+            int[][] estado1 = {{0,1,4},{4,1,1},{0,0,4}};                          
+            g.tablero=estado1;                           
+            out.println(g.toString());            
+            System.out.println("Accion: ");
+            out.println(g.seleccionaMejor(g));
+            
+            System.out.println("Estado2: ");
+            Gato g2 = new Gato();            
+            int[][] estado2 = {{0,0,4},{0,0,1},{4,1,4}};                          
+            g2.tablero=estado2;                           
+            out.println(g2.toString());            
+            System.out.println("Accion: ");
+            out.println(g2.seleccionaMejor(g2));
+        
+            System.out.println("Estado3: ");
+            Gato g3 = new Gato();                        
+            int[][] estado3 = {{1,1,4},{0,0,4},{1,4,0}};                          
+            g3.tablero=estado3;                           
+            out.println(g3.toString());            
+            System.out.println("Accion: ");
+            out.println(g3.seleccionaMejor(g3));                        
         }
-        genera = false;
-    }
-           
+    }                
+                              
     public static void main(String[] args) {
-        Minimax mm= new Minimax();
-        Scanner scn = new Scanner(System.in);        
-        System.out.println("Entrada: ");
-        String cadena=scn.next();        
-        mm.pureba();
-    }
-
+        Gato gato = new Gato();                        
+        gato.estado();
+    }    
 }
