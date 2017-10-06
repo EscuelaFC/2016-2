@@ -1,6 +1,6 @@
 **Brujin** 
 
-*Comandos empleado para que funcionara*
+*Comandos empleados para que funcionara*
 
 >pip install graphviz
 
